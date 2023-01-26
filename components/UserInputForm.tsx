@@ -1,10 +1,12 @@
-import React, { SyntheticEvent, useEffect, useRef, useState } from "react";
+import React, { SyntheticEvent, useRef } from "react";
 import { AppDispatch, RootState } from "../redux/store";
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchProfileUser,
   fetchRepositories,
+  emptyInput,
 } from "../redux/slices/githubReposSlice";
+import { FaSearch } from "react-icons/fa";
 
 const UserInputForm = () => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -13,25 +15,32 @@ const UserInputForm = () => {
 
   function onSubmit(e: SyntheticEvent) {
     e.preventDefault();
-    if (inputRef) {
+
+    if (inputRef.current?.value) {
       dispatch(fetchProfileUser(inputRef.current!.value) as any);
       dispatch(fetchRepositories(inputRef.current!.value) as any);
+    } else {
+      dispatch(emptyInput());
     }
   }
 
   return (
     <form onSubmit={onSubmit}>
-      <input
-        type="search"
-        placeholder="Search user"
-        className="border-2 border-black"
-        ref={inputRef}
-      />
-      <button type="submit" className="px-4 py-1 bg-blue-400">
-        Submit
-      </button>
-
-      {error && <h1>{error.message}</h1>}
+      <div className="flex">
+        <input
+          type="search"
+          placeholder="Search user"
+          className="border-2 border-black pl-4 py-2 rounded-l-md"
+          ref={inputRef}
+        />
+        <button
+          type="submit"
+          className="px-4 py-1 bg-blue-400 hover:bg-blue-500 active:bg-blue-500 rounded-r-md border-2 border-black"
+        >
+          <FaSearch />
+        </button>
+      </div>
+      {error && <h1 className="text-xl text-red-500 mt-8">{error.message}</h1>}
     </form>
   );
 };

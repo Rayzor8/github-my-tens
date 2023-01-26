@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  @apply bg-sky-200 w-full min-h-screen container py-8;
+}
+
+.flex-start {
+  @apply flex gap-2 justify-start items-center;
+}

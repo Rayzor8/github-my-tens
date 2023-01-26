@@ -43,7 +43,12 @@ const initialState: GithubRepos = {
 export const githubReposSlice = createSlice({
   name: "githubRepos",
   initialState,
-  reducers: {},
+  reducers: {
+    emptyInput: (state) => {
+      state.error = { message: "Please type username" };
+      state.repos = [];
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchRepositories.pending, (state, action) => {
       state.isLoading = true;
@@ -79,6 +84,6 @@ export const githubReposSlice = createSlice({
   },
 });
 
-// export const {} = githubReposSlice.actions;
+export const { emptyInput } = githubReposSlice.actions;
 
 export default githubReposSlice.reducer;

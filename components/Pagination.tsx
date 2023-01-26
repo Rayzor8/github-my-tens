@@ -2,7 +2,8 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { RootState } from "../redux/store";
 import { useSelector } from "react-redux";
-
+import { BsArrowRightShort } from "react-icons/bs";
+import { VscRepo } from "react-icons/vsc";
 const Pagination = () => {
   const [page, setPage] = useState(1);
   const REPO_PER_PAGE = 10;
@@ -25,14 +26,25 @@ const Pagination = () => {
 
   return (
     <>
-      <ul className="grid grid-cols-6 gap-4 mt-10">
+      <ul className="grid  sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-10">
         {!isLoading ? (
           selectedRepos.map((repo) => (
-            <li key={repo.id} className="p-2 bg-slate-400">
-              <p>{repo.id}</p>
-              <p>{repo.name}</p>
-              <Link href={repo.html_url} target="_blank">
-                Go to repo
+            <li
+              key={repo.id}
+              className="p-4 bg-white rounded shadow-lg flex flex-col flex-wrap gap-2 "
+            >
+              <p className="text-sm">ID: {repo.id}</p>
+              <div className="flex-start">
+                <VscRepo />
+                <p className="font-bold">{repo.name.toUpperCase()}</p>
+              </div>
+              <Link
+                href={repo.html_url}
+                target="_blank"
+                className="italic text-xs flex-start"
+              >
+                <p className="underline underline-offset-2">Goto Repo</p>
+                <BsArrowRightShort className="text-xl" />
               </Link>
             </li>
           ))
