@@ -1,32 +1,19 @@
-import { createSlice, createAsyncThunk} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-
-
-export interface GithubRepos {
-  repos: [] | Repos[];
-  user: string;
-  isLoading: Boolean;
-  error: null | unknown;
-  profile: {};
-}
-
-interface Repos {
-  id:number
-  full_name:string
-}
+import { GithubRepos } from "../../types";
 
 export const fetchRepositories = createAsyncThunk(
   "fetchRepos/repositories",
-  async (user:string, { rejectWithValue }) => {
+  async (user: string, { rejectWithValue }) => {
     try {
       const { data } = await axios.get(
         `${
           process.env.NEXT_PUBLIC_API_GITHUB_USERS as string
-        }/${user}/repos?per_page=50`
+        }/${user}/repos?per_page=100`
       );
       return data;
-    } catch (error) {
-      return rejectWithValue(error);
+    } catch (error: any | unknown) {
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -39,8 +26,8 @@ export const fetchProfileUser = createAsyncThunk(
         `${process.env.NEXT_PUBLIC_API_GITHUB_USERS as string}/${user}`
       );
       return data;
-    } catch (error) {
-      return rejectWithValue(error);
+    } catch (error: any | unknown) {
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -50,7 +37,7 @@ const initialState: GithubRepos = {
   user: "",
   isLoading: false,
   error: null,
-  profile: {},
+  profile: null,
 };
 
 export const githubReposSlice = createSlice({
@@ -87,6 +74,7 @@ export const githubReposSlice = createSlice({
       state.isLoading = false;
       state.user = "";
       state.error = action.payload;
+      state.profile = null;
     });
   },
 });
